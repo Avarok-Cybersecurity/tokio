@@ -62,7 +62,7 @@ cfg_io_driver! {
     /// [`clear_readiness`]: Registration::clear_readiness
     /// [`poll_read_ready`]: Registration::poll_read_ready
     /// [`poll_write_ready`]: Registration::poll_write_ready
-    pub(crate) struct PollEvented<E: Source> {
+    pub struct PollEvented<E: Source> {
         io: Option<E>,
         registration: Registration,
     }
@@ -82,7 +82,7 @@ impl<E: Source> PollEvented<E> {
     /// explicitly with [`Runtime::enter`](crate::runtime::Runtime::enter) function.
     #[track_caller]
     #[cfg_attr(feature = "signal", allow(unused))]
-    pub(crate) fn new(io: E) -> io::Result<Self> {
+    pub fn new(io: E) -> io::Result<Self> {
         PollEvented::new_with_interest(io, Interest::READABLE | Interest::WRITABLE)
     }
 
@@ -103,7 +103,7 @@ impl<E: Source> PollEvented<E> {
     /// function.
     #[track_caller]
     #[cfg_attr(feature = "signal", allow(unused))]
-    pub(crate) fn new_with_interest(io: E, interest: Interest) -> io::Result<Self> {
+    pub fn new_with_interest(io: E, interest: Interest) -> io::Result<Self> {
         Self::new_with_interest_and_handle(io, interest, scheduler::Handle::current())
     }
 
@@ -128,7 +128,7 @@ impl<E: Source> PollEvented<E> {
 
     /// Deregisters the inner io from the registration and returns a Result containing the inner io.
     #[cfg(any(feature = "net", feature = "process"))]
-    pub(crate) fn into_inner(mut self) -> io::Result<E> {
+    pub fn into_inner(mut self) -> io::Result<E> {
         let mut inner = self.io.take().unwrap(); // As io shouldn't ever be None, just unwrap here.
         self.registration.deregister(&mut inner)?;
         Ok(inner)

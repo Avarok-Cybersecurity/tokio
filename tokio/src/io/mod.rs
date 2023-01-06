@@ -222,7 +222,7 @@ cfg_io_driver_impl! {
 
     #[cfg(not(loom))]
     #[cfg_attr(tokio_wasi, allow(unused_imports))]
-    pub(crate) use poll_evented::PollEvented;
+    pub use poll_evented::PollEvented;
 }
 
 cfg_aio! {
